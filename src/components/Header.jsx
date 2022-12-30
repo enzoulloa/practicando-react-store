@@ -7,7 +7,9 @@ const Header = () => {
       <h2 className='Header-title' />
       <Link to='/'>Store</Link>
       <div className='Header-checkout'>
-        <Link to='/checkout'>Chekout</Link>
+        <Link to='/checkout'>
+          <i className='fas fa-shopping-basket fa-2x' />
+        </Link>
       </div>
     </div>
   )

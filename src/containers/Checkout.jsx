@@ -7,10 +7,12 @@ const Checkout = () => {
       <div className='Checkout-content'>
         <h3>Lista de Pedidos:</h3>
         <div className='Checkout-item'>
-          <h4>ITEM name</h4>
-          <span>$10</span>
+          <div className='Checkout-element'>
+            <h4>ITEM name</h4>
+            <span>$10</span>
+          </div>
+          <button type='button'><i className='fas fa-trash-alt' /></button>
         </div>
-        <button type='button'>Eliminar</button>
       </div>
       <div className='Checkout-sidebar'>
         <h3>Precio Total:$10</h3>
