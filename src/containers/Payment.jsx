@@ -1,6 +1,6 @@
 const Payment = () => {
   return (
-    <div>
+    <div className='Payment'>
       <h1>Payment</h1>
     </div>
   )
