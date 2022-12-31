@@ -1,15 +1,90 @@
+import React, { useContext } from 'react'
+import { PayPalButton } from 'react-paypal-button-v2'
+import AppContext from '../context/AppContext'
 import '../styles/components/Payment.css'
+import { useNavigate } from 'react-router-dom'
 
 const Payment = () => {
+  const navigate = useNavigate()
+  const { state, addNewOrder } = useContext(AppContext)
+  const { cart, buyer } = state
+
+  const paypalOptions = {
+    clientID: 'ARKA3uliqUX66ve6mrI55p2tYiu_PUZtVPY-FbPH7h4zidJwnn6G9Tce0Kna4x9TTMumxW0vEmITEIqc',
+    intent: 'capture',
+    currency: 'USD'
+  }
+
+  const buttonStyles = {
+    Layout: 'vertical',
+    shape: 'rect'
+  }
+
+  const handleSumTotal = () => {
+    const reducer = (accumulator, currentValue) =>
+      accumulator + currentValue.price
+    const sum = cart.reduce(reducer, 0)
+    return sum
+  }
+
+  const handlePaymentSuccess = (data) => {
+    console.log('sucessing')
+    if (data.status === 'COMPLETED') {
+      const newOrder = {
+        buyer,
+        product: cart,
+        payment: data
+      }
+      addNewOrder(newOrder)
+      navigate('/checkout/success')
+    }
+  }
+  const createOrder = (data, actions) => {
+    return actions.order.create({
+      purchase_units: [
+        {
+          amount: {
+            value: handleSumTotal()
+          }
+        }
+      ]
+    })
+  }
+  const onApprove = (data, actions) => {
+    return actions.order.capture().then(function (data) {
+      handlePaymentSuccess(data)
+    })
+  }
+
   return (
     <div className='Payment'>
       <div className='Payment-content'>
-        <h3>Resumen del pedido:</h3>
+        <h3>Resumen del Pedido:</h3>
+        {cart.map((item) => (
+          <div className='Payment-item' key='item.title'>
+            <div className='Payment-element'>
+              <h4>{item.title}</h4>
+              <span>$ {item.price}</span>
+            </div>
+          </div>
+        ))}
+        <div className='Payment-item'>
+          <h3>Total:</h3>
+          <span><strong>$ {handleSumTotal()}</strong></span>
+        </div>
         <div className='Payment-button'>
-          Boton de pago con Paypal
+          <PayPalButton
+            paypalOptions={paypalOptions}
+            buttonStyles={buttonStyles}
+            createOrder={(data, actions) => createOrder(data, actions)}
+            onApprove={(data, actions) => onApprove(data, actions)}
+            onError={(error) => console.log(error)}
+            onCancel={data => console.log(data)}
+          />
         </div>
       </div>
     </div>
   )
 }
+
 export default Payment
