@@ -1,21 +1,21 @@
-// eslint-disable-next-line no-unused-vars
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'
 
-const Map = () => {
+const Map = ({ data }) => {
   const mapStyles = {
     height: '50vh',
     width: '100%'
   }
 
   const defaultCenter = {
-    lat: -32.889076, lng: -68.839578
+    // lat: -32.889076, lng: -68.839578
+    lat: data.lat, lng: data.lng
   }
 
   return (
     <LoadScript googleMapsApiKey='AIzaSyCET9XGvcR8GrLaItzphrFQEpXml0kbgDQ'>
       <GoogleMap
         mapContainerStyle={mapStyles}
-        zoom={9}
+        zoom={17}
         center={defaultCenter}
       >
         <Marker position={defaultCenter} />
